@@ -1,8 +1,8 @@
 # oss-audit-24bce11026
 
-**Name:** Nrishan Jyoti Das
-**Reg No:** 24BCE11026
-**Course:** Open Source Software | VIT
+**Name:** Nrishan Jyoti Das,
+**Reg No:** 24BCE11026,
+**Course:** Open Source Software | VIT,
 **Chosen Software:** Git
 
 ---
@@ -19,7 +19,7 @@ The project report is submitted separately as a PDF. It covers Git's origin, lic
 
 There are 5 shell scripts in this repo. Each one covers different shell scripting concepts.
 
-### script1_system_identity.sh
+### ->script1_system_identity.sh
 
 Shows basic syst info like a welcome screen — distro name, kernel, user, uptime, date, and a note about the GPL v2 license.
 
@@ -32,7 +32,7 @@ chmod +x script1_system_identity.sh
 
 ---
 
-### script2_package_inspector.sh
+### ->script2_package_inspector.sh
 
 Checks if git is installed using dpkg or rpm, shows version info, and has a case statement with philosophy notes about different packages.
 
@@ -45,7 +45,7 @@ chmod +x script2_package_inspector.sh
 
 ---
 
-### script3_disk_auditor.sh
+### ->script3_disk_auditor.sh
 
 loops through system directories (/etc, /var/log, /home, /usr/bin, /tmp) and shows permissions, owner, group, and disk usage. Also checks git config files.
 
@@ -58,7 +58,7 @@ chmod +x script3_disk_auditor.sh
 
 ---
 
-### script4_log_analyzer.sh
+### ->script4_log_analyzer.sh
 
 Takes a log file and a keyword, reads it line by line, counts matches, and shows the last 5 matching lines. Has a retry loop if the file isn't found.
 
@@ -72,7 +72,7 @@ chmod +x script4_log_analyzer.sh
 
 ---
 
-### script5_manifesto_generator.sh
+### ->script5_manifesto_generator.sh
 
 it asks 3 questions interactively, then writes a personalized open source manifesto to a .txt file.
 
