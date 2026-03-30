@@ -1,42 +1,60 @@
 #!/bin/bash
-# System Identity Report
-# Omkar | 24bce10843 | OSS Project | Software: Git
+# Script 1: System Identity Report
+# Nrishan Jyoti Das | 24BCE11026 | OSS Vityarthi Course
+# Software: Git
 
-STUDENT_NAME="Omkar"
-REG_NO="24bce10843"
-SOFTWARE_CHOICE="Git"
+# my info
+MY_NAME="Nrishan Jyoti Das"
+MY_REG="24BCE11026"
+CHOSEN_SW="Git"
 
-# grab system info
-KERNEL=$(uname -r)
-USER_NAME=$(whoami)
-HOME_DIR=$HOME
-UPTIME=$(uptime -p)
-CURRENT_DATE=$(date '+%d %B %Y, %H:%M:%S')
+# pulling system details
+SYS_KERNEL=$(uname -r)
+SYS_ARCH=$(uname -m)
+SYS_HOST=$(hostname)
+LOGGED_USER=$(whoami)
+USER_HOME="$HOME"
+SYS_UPTIME=$(uptime -p)
+TODAY=$(date '+%A, %d %B %Y at %H:%M:%S')
 
-# /etc/os-release has the distro name on most modern systems
+# get distro name from os-release if it exists
 if [ -f /etc/os-release ]; then
-    DISTRO=$(grep -w "PRETTY_NAME" /etc/os-release | cut -d= -f2 | tr -d '"')
+    DISTRO_NAME=$(grep "^PRETTY_NAME" /etc/os-release | cut -d'"' -f2)
 else
-    DISTRO="Unknown"
+    DISTRO_NAME="Unknown"
 fi
 
-echo "========================================================"
-echo "   OPEN SOURCE AUDIT -- System Identity Report"
-echo "========================================================"
-echo "  Student : $STUDENT_NAME ($REG_NO)"
-echo "  Software: $SOFTWARE_CHOICE"
-echo "========================================================"
+# printing everything out
 echo ""
-echo "  Distribution  : $DISTRO"
-echo "  Kernel        : $KERNEL"
-echo "  User          : $USER_NAME"
-echo "  Home          : $HOME_DIR"
-echo "  Uptime        : $UPTIME"
-echo "  Date/Time     : $CURRENT_DATE"
+echo "+---------------------------------------------------------+"
+echo "|       SYSTEM IDENTITY REPORT - Open Source Audit        |"
+echo "+---------------------------------------------------------+"
 echo ""
-echo "  This OS runs under the GNU GPL v2."
-echo "  Git also uses GPL v2 -- you can read it, fork it,"
-echo "  change it, but you cannot lock it down."
+echo "  Student       : $MY_NAME"
+echo "  Reg No        : $MY_REG"
+echo "  Software      : $CHOSEN_SW"
 echo ""
-echo "  'Free as in freedom, not free as in free beer.' -- RMS"
-echo "========================================================"
+echo "+---------------------------------------------------------+"
+echo "|               System Info                               |"
+echo "+---------------------------------------------------------+"
+echo ""
+echo "  Hostname      : $SYS_HOST"
+echo "  Distro        : $DISTRO_NAME"
+echo "  Kernel        : $SYS_KERNEL"
+echo "  Arch          : $SYS_ARCH"
+echo "  User          : $LOGGED_USER"
+echo "  Home Dir      : $USER_HOME"
+echo "  Uptime        : $SYS_UPTIME"
+echo "  Date/Time     : $TODAY"
+echo ""
+echo "+---------------------------------------------------------+"
+echo "|               License Note                              |"
+echo "+---------------------------------------------------------+"
+echo ""
+echo "  Linux runs under GNU GPL v2."
+echo "  Git is also GPL v2 — anyone can read, modify"
+echo "  and share the source code."
+echo ""
+echo "  'Free software is a matter of liberty, not price.' - RMS"
+echo ""
+echo "+---------------------------------------------------------+"

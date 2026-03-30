@@ -1,60 +1,68 @@
 #!/bin/bash
-# Disk and Permission Auditor
-# Omkar | 24bce10843 | OSS Project | Software: Git
+# Script 3: Disk and Permission Auditor
+# Nrishan Jyoti Das | 24BCE11026 | OSS Vityarthi Course
+# Software: Git
 
-DIRS=("/etc" "/var/log" "/home" "/usr/bin" "/tmp")
+# dirs to check
+SYS_DIRS=("/etc" "/var/log" "/home" "/usr/bin" "/tmp")
 
-echo "========================================================"
-echo "   Disk and Permission Auditor"
-echo "========================================================"
 echo ""
-printf "  %-20s %-28s %-8s\n" "Directory" "Permissions / Owner / Group" "Size"
-echo "  ----------------------------------------------------------"
+echo "+---------------------------------------------------------+"
+echo "|          Disk and Permission Auditor                    |"
+echo "+---------------------------------------------------------+"
+echo ""
 
-for DIR in "${DIRS[@]}"; do
-    if [ -d "$DIR" ]; then
-        # pull permissions, owner, group from ls output
-        PERMS=$(ls -ld "$DIR" | awk '{print $1, $3, $4}')
-        SIZE=$(du -sh "$DIR" 2>/dev/null | cut -f1)
-        printf "  %-20s %-28s %-8s\n" "$DIR" "$PERMS" "${SIZE:-N/A}"
+# table header
+printf "  %-18s | %-30s | %-10s\n" "Path" "Perms / Owner / Group" "Size"
+echo "  -----------------------------------------------------------------"
+
+# looping through each dir
+for CURR_DIR in "${SYS_DIRS[@]}"; do
+    if [ -d "$CURR_DIR" ]; then
+        # get perms + owner + group
+        DIR_INFO=$(ls -ld "$CURR_DIR" | awk '{print $1, $3, $4}')
+        # get size
+        DIR_SIZE=$(du -sh "$CURR_DIR" 2>/dev/null | cut -f1)
+        printf "  %-18s | %-30s | %-10s\n" "$CURR_DIR" "$DIR_INFO" "${DIR_SIZE:-N/A}"
     else
-        printf "  %-20s %s\n" "$DIR" "does not exist"
+        printf "  %-18s | %-30s | %-10s\n" "$CURR_DIR" "(doesn't exist)" "---"
     fi
 done
 
 echo ""
-echo "========================================================"
-echo "  Git config check"
-echo "========================================================"
+echo "+---------------------------------------------------------+"
+echo "|     Git Config Check                                    |"
+echo "+---------------------------------------------------------+"
 echo ""
 
-GIT_GLOBAL_CONFIG="$HOME/.gitconfig"
+# check user-level git config
+GIT_USER_CFG="$HOME/.gitconfig"
 
-if [ -f "$GIT_GLOBAL_CONFIG" ]; then
-    PERMS=$(ls -l "$GIT_GLOBAL_CONFIG" | awk '{print $1, $3, $4}')
-    SIZE=$(du -sh "$GIT_GLOBAL_CONFIG" 2>/dev/null | cut -f1)
-    echo "  found: $GIT_GLOBAL_CONFIG"
-    echo "  permissions: $PERMS"
-    echo "  size: $SIZE"
+if [ -f "$GIT_USER_CFG" ]; then
+    CFG_PERMS=$(ls -l "$GIT_USER_CFG" | awk '{print $1, $3, $4}')
+    CFG_SIZE=$(du -sh "$GIT_USER_CFG" 2>/dev/null | cut -f1)
+    echo "  found: $GIT_USER_CFG"
+    echo "  perms: $CFG_PERMS"
+    echo "  size:  $CFG_SIZE"
     echo ""
-    echo "  this file stores your name, email, sometimes credentials."
-    echo "  should be 644 at most. never 777."
+    echo "  this file has your name/email, sometimes creds."
+    echo "  should be 644 max, never 777."
 else
-    echo "  no global git config at $GIT_GLOBAL_CONFIG"
-    echo "  set it up with:"
-    echo "    git config --global user.name 'Your Name'"
+    echo "  no git config at $GIT_USER_CFG"
+    echo "  set up with:"
+    echo "    git config --global user.name 'Nrishan'"
     echo "    git config --global user.email 'you@example.com'"
 fi
 
 echo ""
 
-# system-wide git config, usually not present and that's fine
+# system-wide git config (usually not there)
 if [ -f "/etc/gitconfig" ]; then
-    PERMS=$(ls -l "/etc/gitconfig" | awk '{print $1, $3, $4}')
-    echo "  system git config: /etc/gitconfig | $PERMS"
+    SYS_PERMS=$(ls -l "/etc/gitconfig" | awk '{print $1, $3, $4}')
+    echo "  system config: /etc/gitconfig | $SYS_PERMS"
 else
-    echo "  no /etc/gitconfig present (normal)"
+    echo "  no /etc/gitconfig (thats normal)"
 fi
 
 echo ""
-echo "========================================================"
+echo "+---------------------------------------------------------+"

@@ -1,58 +1,65 @@
 #!/bin/bash
-# Open Source Manifesto Generator
-# Omkar | 24bce10843 | OSS Project | Software: Git
+# Script 5: Open Source Manifesto Generator
+# Nrishan Jyoti Das | 24BCE11026 | OSS Vityarthi Course
+# Software: Git
 
-# note: aliases are shell shortcuts defined like this:
+# alias demo :
 # alias gs='git status'
-# they don't persist across sessions unless you add them to ~/.bashrc
+# put aliases in ~/.bashrc so they stick across sessions
 
-echo "========================================================"
-echo "   Open Source Manifesto Generator"
-echo "   Omkar | 24bce10843"
-echo "========================================================"
 echo ""
-echo "  three questions. your manifesto gets generated from your answers."
+echo "+---------------------------------------------------------+"
+echo "|        Open Source Manifesto Generator                  |"
+echo "|        Nrishan Jyoti Das | 24BCE11026                  |"
+echo "+---------------------------------------------------------+"
 echo ""
-
-read -p "  1. one open-source tool you use every day: " TOOL
-echo ""
-read -p "  2. in one word, what does freedom mean to you: " FREEDOM
-echo ""
-read -p "  3. one thing you would build and share freely: " BUILD
+echo "  answer 3 questions and ill make your manifesto."
 echo ""
 
-DATE=$(date '+%d %B %Y')
-OUTPUT="manifesto_$(whoami).txt"
-
-# write header to file (> overwrites, >> appends)
-echo "========================================================" > "$OUTPUT"
-echo "  MY OPEN SOURCE MANIFESTO" >> "$OUTPUT"
-echo "  $(whoami) | $DATE" >> "$OUTPUT"
-echo "========================================================" >> "$OUTPUT"
-echo "" >> "$OUTPUT"
-
-# build the paragraph using the three inputs
-echo "  Every day I open $TOOL, which someone built and gave away" >> "$OUTPUT"
-echo "  without asking for anything back except collaboration." >> "$OUTPUT"
-echo "" >> "$OUTPUT"
-echo "  To me freedom means $FREEDOM. Open source is one of the" >> "$OUTPUT"
-echo "  few places where that actually exists in practice." >> "$OUTPUT"
-echo "" >> "$OUTPUT"
-echo "  I want to build $BUILD someday and share it the same way." >> "$OUTPUT"
-echo "  Not because I have to. Because that's how the best things" >> "$OUTPUT"
-echo "  in software get made -- in the open, by people who care" >> "$OUTPUT"
-echo "  more about the problem than the credit." >> "$OUTPUT"
-echo "" >> "$OUTPUT"
-echo "  Git taught me that. One frustrated person wrote a tool" >> "$OUTPUT"
-echo "  over a weekend and now the entire world's code runs on it." >> "$OUTPUT"
-echo "" >> "$OUTPUT"
-echo "========================================================" >> "$OUTPUT"
-echo "  'Given enough eyeballs, all bugs are shallow.' Linus's Law" >> "$OUTPUT"
-echo "========================================================" >> "$OUTPUT"
-
-echo "  writing manifesto..."
+# get user input
+read -p "  1. an open-source tool u use daily: " DAILY_TOOL
 echo ""
-cat "$OUTPUT"
+read -p "  2. one word — what does freedom mean to u: " FREEDOM_WORD
 echo ""
-echo "  saved to: $OUTPUT"
-echo "========================================================"
+read -p "  3. something u'd build and share freely: " SHARE_IDEA
+echo ""
+
+# date for the header
+GEN_DATE=$(date '+%d %B %Y')
+
+# outpurt file named after current user
+OUT_FILE="manifesto_$(whoami).txt"
+
+# write header (> overwrites)
+echo "+---------------------------------------------------------+" > "$OUT_FILE"
+echo "  MY OPEN SOURCE MANIFESTO" >> "$OUT_FILE"
+echo "  by $(whoami) | $GEN_DATE" >> "$OUT_FILE"
+echo "+---------------------------------------------------------+" >> "$OUT_FILE"
+echo "" >> "$OUT_FILE"
+
+# build the paragraph from answers (>> appends)
+echo "  I use $DAILY_TOOL every day. someone built it and gave" >> "$OUT_FILE"
+echo "  it away for free, just so others could use it too." >> "$OUT_FILE"
+echo "" >> "$OUT_FILE"
+echo "  freedom to me means $FREEDOM_WORD. open source is one" >> "$OUT_FILE"
+echo "  of the few places where that actually happens." >> "$OUT_FILE"
+echo "" >> "$OUT_FILE"
+echo "  someday i want to build $SHARE_IDEA and put it out" >> "$OUT_FILE"
+echo "  there the same way. not for money, just because thats" >> "$OUT_FILE"
+echo "  how the best software gets made — by people who care" >> "$OUT_FILE"
+echo "  about the problem more than the credit." >> "$OUT_FILE"
+echo "" >> "$OUT_FILE"
+echo "  git is proof. one guy wrote it in 2 weeks because he" >> "$OUT_FILE"
+echo "  was frustrated, and now the whole world depends on it." >> "$OUT_FILE"
+echo "" >> "$OUT_FILE"
+echo "+---------------------------------------------------------+" >> "$OUT_FILE"
+echo "  'Given enough eyeballs, all bugs are shallow.' - Linus's Law" >> "$OUT_FILE"
+echo "+---------------------------------------------------------+" >> "$OUT_FILE"
+
+# now show it
+echo "  generating..."
+echo ""
+cat "$OUT_FILE"
+echo ""
+echo "  saved to: $OUT_FILE"
+echo "+---------------------------------------------------------+"

@@ -1,66 +1,78 @@
 #!/bin/bash
-# FOSS Package Inspector
-# Omkar | 24bce10843 | OSS Project | Software: Git
+# Script 2: FOSS Package Inspector
+# Nrishan Jyoti Das | 24BCE11026 | OSS Vityarthi Course
+# Software: Git
 
-PACKAGE="git"
+TARGET_PKG="git"
 
-echo "========================================================"
-echo "   FOSS Package Inspector"
-echo "========================================================"
+echo ""
+echo "+---------------------------------------------------------+"
+echo "|            FOSS Package Inspector                       |"
+echo "+---------------------------------------------------------+"
+echo ""
+echo "  Checking: $TARGET_PKG"
 echo ""
 
-# try dpkg first (ubuntu/debian), fall back to rpm
-if dpkg -l "$PACKAGE" &>/dev/null; then
-    echo "[OK] $PACKAGE is installed"
-    echo ""
-    dpkg -s "$PACKAGE" | grep -E 'Version|Maintainer|Homepage' | sed 's/^/  /'
-    echo ""
-    echo "  $(git --version)"
-
-elif rpm -q "$PACKAGE" &>/dev/null; then
-    echo "[OK] $PACKAGE is installed (rpm system)"
-    echo ""
-    rpm -qi "$PACKAGE" | grep -E 'Version|License|Summary' | sed 's/^/  /'
-
+# checking dpkg first (debian/ubuntu), then trying rpm
+if command -v dpkg &>/dev/null; then
+    if dpkg -s "$TARGET_PKG" &>/dev/null; then
+        echo "  [INSTALLED] $TARGET_PKG found"
+        echo ""
+        # grabbing version, maintainer, homepage
+        dpkg -s "$TARGET_PKG" | grep -E '^(Version|Maintainer|Homepage):' | sed 's/^/    /'
+        echo ""
+        echo "  Binary: $(git --version 2>/dev/null || echo 'not in PATH')"
+    else
+        echo "  [NOT FOUND] $TARGET_PKG not installed"
+        echo "  try: sudo apt install $TARGET_PKG"
+    fi
+elif command -v rpm &>/dev/null; then
+    if rpm -q "$TARGET_PKG" &>/dev/null; then
+        echo "  [INSTALLED] $TARGET_PKG found (rpm)"
+        echo ""
+        rpm -qi "$TARGET_PKG" | grep -E 'Version|License|Summary' | sed 's/^/    /'
+    else
+        echo "  [NOT FOUND] $TARGET_PKG not installed"
+        echo "  try: sudo dnf install $TARGET_PKG"
+    fi
 else
-    echo "[NOT FOUND] $PACKAGE is not installed"
-    echo ""
-    echo "  ubuntu/debian : sudo apt install git"
-    echo "  fedora/rhel   : sudo dnf install git"
+    echo "  [WARN] no dpkg or rpm found"
 fi
 
 echo ""
-echo "========================================================"
-echo "  Philosophy by package"
-echo "========================================================"
+echo "+---------------------------------------------------------+"
+echo "|          Philosophy Notes                               |"
+echo "+---------------------------------------------------------+"
 echo ""
 
-# one note per package about why it matters
-case $PACKAGE in
+# case statement — short short description about each package
+case $TARGET_PKG in
     git)
-        echo "  Git: built in 2 weeks because a proprietary tool"
-        echo "  cut off the Linux kernel team's access. Linus was"
-        echo "  frustrated, so he built something better. GPL v2."
+        echo "  Git: Linus built it in ~2 weeks after BitKeeper"
+        echo "  cut off access. GPL v2. Now everyone uses it."
         ;;
     httpd|apache2)
-        echo "  Apache: before this, web servers cost money."
+        echo "  Apache: made web hosting free. runs ~30% of sites."
         ;;
-    mysql)
-        echo "  MySQL: dual-licensed, GPL for open source, paid for proprietary."
+    mysql|mariadb)
+        echo "  MySQL: dual licensed — GPL for community, paid for enterprise."
         ;;
     firefox)
-        echo "  Firefox: a nonprofit browser. exists because IE once had 96% share."
+        echo "  Firefox: nonprofit browser, fighting for an open web."
         ;;
     vlc)
-        echo "  VLC: started by students who just wanted to stream video on campus."
+        echo "  VLC: started as a student project in Paris."
         ;;
     python3|python)
-        echo "  Python: shaped entirely by community proposals, the PSF keeps it free."
+        echo "  Python: community-driven, governed by PEPs."
+        ;;
+    libreoffice)
+        echo "  LibreOffice: forked from OpenOffice after Oracle took over."
         ;;
     *)
-        echo "  $PACKAGE: open source. someone built it and chose to share it."
+        echo "  $TARGET_PKG: open source — someone built it and shared it."
         ;;
 esac
 
 echo ""
-echo "========================================================"
+echo "+---------------------------------------------------------+"

@@ -1,83 +1,93 @@
 #!/bin/bash
-# Log File Analyzer
-# Omkar | 24bce10843 | OSS Project | Software: Git
+# Script 4: Log File Analyzer
+# Nrishan Jyoti Das | 24BCE11026 | OSS Vityarthi Course
+# Software: Git
 # Usage: ./script4_log_analyzer.sh <logfile> [keyword]
-# Example: ./script4_log_analyzer.sh /var/log/syslog error
 
-LOGFILE=$1
-KEYWORD=${2:-"error"}  # default to "error" if nothing is passed
-COUNT=0
-ATTEMPT=0
-MAX_RETRIES=3
+# get args
+LOG_PATH=$1
+SEARCH_WORD=${2:-"error"}   # defaults to "error"
+MATCH_COUNT=0
+RETRY_NUM=0
+MAX_RETRY=3
 
-echo "========================================================"
-echo "   Log File Analyzer"
-echo "========================================================"
+echo ""
+echo "+---------------------------------------------------------+"
+echo "|              Log File Analyzer                          |"
+echo "+---------------------------------------------------------+"
 echo ""
 
-if [ -z "$LOGFILE" ]; then
-    echo "Usage: $0 <logfile> [keyword]"
-    echo "Example: $0 /var/log/syslog error"
+# no file given? show usage and exit
+if [ -z "$LOG_PATH" ]; then
+    echo "  Usage: $0 <logfile> [keyword]"
+    echo "  e.g.: $0 /var/log/syslog error"
     exit 1
 fi
 
-# retry loop if file not found -- ask user to try a different path
+# retry loop if file doesnt exist — asks for another path
 while true; do
-    ATTEMPT=$((ATTEMPT + 1))
+    RETRY_NUM=$((RETRY_NUM + 1))
 
-    if [ -f "$LOGFILE" ]; then
+    if [ -f "$LOG_PATH" ]; then
         break
     else
-        echo "  attempt $ATTEMPT/$MAX_RETRIES: $LOGFILE not found"
+        echo "  attempt $RETRY_NUM/$MAX_RETRY: $LOG_PATH not found"
 
-        if [ $ATTEMPT -ge $MAX_RETRIES ]; then
-            echo "  giving up. common log locations:"
-            echo "    /var/log/syslog      (ubuntu/debian)"
-            echo "    /var/log/messages    (fedora/rhel)"
-            echo "    /var/log/auth.log    (auth events)"
-            echo "    /var/log/dpkg.log    (package history)"
+        if [ $RETRY_NUM -ge $MAX_RETRY ]; then
+            echo ""
+            echo "  gave up. try one of these:"
+            echo "    /var/log/syslog"
+            echo "    /var/log/messages"
+            echo "    /var/log/auth.log"
+            echo "    /var/log/kern.log"
             exit 1
         fi
 
-        read -p "  enter a valid path: " LOGFILE
+        read -p "  enter another path: " LOG_PATH
     fi
 done
 
-echo "  file: $LOGFILE"
-
-if [ ! -s "$LOGFILE" ]; then
-    echo "  file is empty, nothing to read"
+# empty file check
+if [ ! -s "$LOG_PATH" ]; then
+    echo "  file is empty, nothing to do"
     exit 0
 fi
 
-echo "  keyword: $KEYWORD"
+echo "  file:    $LOG_PATH"
+echo "  keyword: $SEARCH_WORD"
 echo ""
 
-# read through the file line by line and count matches
+# count total lines for context
+TOTAL_LINES=$(wc -l < "$LOG_PATH")
+
+# read line by line and count matches
 while IFS= read -r LINE; do
-    if echo "$LINE" | grep -iq "$KEYWORD"; then
-        COUNT=$((COUNT + 1))
+    if echo "$LINE" | grep -iq "$SEARCH_WORD"; then
+        MATCH_COUNT=$((MATCH_COUNT + 1))
     fi
-done < "$LOGFILE"
+done < "$LOG_PATH"
 
-echo "========================================================"
-echo "  Results"
-echo "========================================================"
+# results
+echo "+---------------------------------------------------------+"
+echo "|                   Results                               |"
+echo "+---------------------------------------------------------+"
 echo ""
-echo "  file    : $LOGFILE"
-echo "  keyword : $KEYWORD"
-echo "  matches : $COUNT"
+echo "  file:     $LOG_PATH"
+echo "  lines:    $TOTAL_LINES"
+echo "  keyword:  $SEARCH_WORD"
+echo "  matches:  $MATCH_COUNT"
 echo ""
 
-if [ $COUNT -gt 0 ]; then
+# show last 5 matches if any
+if [ $MATCH_COUNT -gt 0 ]; then
     echo "  last 5 matching lines:"
     echo "  ----------------------"
-    grep -i "$KEYWORD" "$LOGFILE" | tail -5 | while IFS= read -r LINE; do
-        echo "  > $LINE"
+    grep -i "$SEARCH_WORD" "$LOG_PATH" | tail -5 | while IFS= read -r MATCH; do
+        echo "    >> $MATCH"
     done
 else
-    echo "  no matches found for '$KEYWORD'"
+    echo "  no matches for '$SEARCH_WORD'"
 fi
 
 echo ""
-echo "========================================================"
+echo "+---------------------------------------------------------+"
